@@ -13,10 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelBtn = document.getElementById('cancelSum');
     const sumInput = document.getElementById('sumInput');
     const diceSumText = document.getElementById('diceSum');
+    const gameOverModal = document.getElementById('gameOverModal');
+    const finalDiceResult = document.getElementById('finalDiceResult');
 
     let currentSum = 0;
     let selectedSum = 0;
     let canRoll = true;
+    let lastRoll = { die1: 1, die2: 1 };
 
     playButton.addEventListener('click', () => {
         instructionsSection.style.display = 'none';
@@ -55,8 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function animateDice(callback) {
-        const animationDuration = 1000; // 1 second
-        const intervalDuration = 50; // 50 milliseconds between updates
+        const animationDuration = 1000;
+        const intervalDuration = 50;
         let elapsedTime = 0;
 
         die1.classList.add('shake');
@@ -103,12 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
         gifElement.style.display = 'block';
         setTimeout(() => {
             gifElement.style.display = 'none';
-            showSumModal(parseInt(die1.alt.split(' ').pop()), parseInt(die2.alt.split(' ').pop()));
+            showSumModal(lastRoll.die1, lastRoll.die2);
         }, 1000);
     }
 
     function showGameOverModal() {
-        const gameOverModal = document.getElementById('gameOverModal');
+        finalDiceResult.textContent = `Último lanzamiento: ${lastRoll.die1} y ${lastRoll.die2}`;
         gameOverModal.style.display = 'block';
     }
 
@@ -172,28 +175,24 @@ document.addEventListener('DOMContentLoaded', () => {
         rollButton.disabled = false;
 
         if (!checkPossibleSum(currentSum, numbers)) {
-            setTimeout(() => {
-                showGameOverModal();
-            }, 1500);
+            showGameOverModal();
         }
     }
 
     acceptBtn.onclick = function() {
         const userGuess = parseInt(sumInput.value);
-        const hiddenDiceValue = parseInt(die2.alt.split(' ').pop());
+        const hiddenDiceValue = lastRoll.die2;
         
         if (userGuess === hiddenDiceValue) {
             hideSumModal();
             showCorrectGif();
-            currentSum = parseInt(die1.alt.split(' ').pop()) + hiddenDiceValue;
+            currentSum = lastRoll.die1 + hiddenDiceValue;
             selectedSum = 0;
             canRoll = false;
             rollButton.disabled = true;
 
             if (!checkPossibleSum(currentSum, numbers)) {
-                setTimeout(() => {
-                    showGameOverModal();
-                }, 1500);
+                showGameOverModal();
             }
         } else {
             hideSumModal();
@@ -207,14 +206,14 @@ document.addEventListener('DOMContentLoaded', () => {
             resetButton.disabled = true;
 
             animateDice(() => {
-                const roll1 = getRandomDieValue();
-                const roll2 = getRandomDieValue();
-                updateDieImage(die1, roll1);
-                updateDieImage(die2, roll2);
-                die2.style.visibility = 'hidden';  // Mantén el segundo dado oculto
+                lastRoll.die1 = getRandomDieValue();
+                lastRoll.die2 = getRandomDieValue();
+                updateDieImage(die1, lastRoll.die1);
+                updateDieImage(die2, lastRoll.die2);
+                die2.style.visibility = 'hidden';
                 resetButton.disabled = false;
                 
-                showSumModal(roll1, roll2);
+                showSumModal(lastRoll.die1, lastRoll.die2);
             });
         }
     }
@@ -225,19 +224,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         updateDieImage(die1, 1);
         updateDieImage(die2, 1);
-        die2.style.visibility = 'hidden';  // Oculta el segundo dado al reiniciar
+        die2.style.visibility = 'hidden';
+        lastRoll = { die1: 1, die2: 1 };
         currentSum = 0;
         selectedSum = 0;
         canRoll = true;
         rollButton.disabled = false;
-        document.getElementById('gameOverModal').style.display = 'none';
+        gameOverModal.style.display = 'none';
     }
 
     rollButton.addEventListener('click', rollDice);
     resetButton.addEventListener('click', resetGame);
-    document.getElementById('gameOverReset').addEventListener('click', function() {
-        document.getElementById('gameOverModal').style.display = 'none';
-        resetGame();
-    });
+    document.getElementById('gameOverReset').addEventListener('click', resetGame);
 });
 
