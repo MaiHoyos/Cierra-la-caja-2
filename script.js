@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 lastRoll.die2 = getRandomDieValue();
                 updateDieImage(die1, lastRoll.die1);
                 updateDieImage(die2, lastRoll.die2);
-                die2.style.visibility = 'hidden';
+                die2.style.display = 'none';
                 resetButton.disabled = false;
                 
                 showSumModal(lastRoll.die1, lastRoll.die2);
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         updateDieImage(die1, 1);
         updateDieImage(die2, 1);
-        die2.style.visibility = 'hidden';
+        die2.style.display = 'none';
         lastRoll = { die1: 1, die2: 1 };
         currentSum = 0;
         selectedSum = 0;
