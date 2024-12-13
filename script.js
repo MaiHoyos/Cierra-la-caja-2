@@ -138,30 +138,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkPossibleSum(targetSum, availableNumbers) {
         const numbers = Array.from(availableNumbers)
-            .filter(num => !num.classList.contains('closed') && !num.classList.contains('selected'))
+            .filter(num => !num.classList.contains('closed'))
             .map(num => parseInt(num.dataset.value));
 
-        for (let i = 1; i <= 4; i++) {
-            if (findCombination(numbers, targetSum, i)) {
-                return true;
-            }
+        // Verificar si hay números disponibles
+        if (numbers.length === 0) {
+            return false;
         }
-        return false;
+
+        // Verificar si la suma objetivo es posible con los números disponibles
+        return findCombination(numbers, targetSum, Math.min(4, numbers.length));
     }
 
-    function findCombination(numbers, target, count, start = 0, current = []) {
-        if (count === 0) {
-            return current.reduce((a, b) => a + b, 0) === target;
+    function findCombination(numbers, target, maxCount) {
+        if (target === 0) return true;
+        if (maxCount === 0 || numbers.length === 0) return false;
+
+        // Intentar usar el primer número
+        if (numbers[0] <= target && findCombination(numbers.slice(1), target - numbers[0], maxCount - 1)) {
+            return true;
         }
-        
-        for (let i = start; i < numbers.length; i++) {
-            current.push(numbers[i]);
-            if (findCombination(numbers, target, count - 1, i + 1, current)) {
-                return true;
-            }
-            current.pop();
-        }
-        return false;
+
+        // Intentar sin usar el primer número
+        return findCombination(numbers.slice(1), target, maxCount);
     }
 
     function closeSelectedNumbers() {
@@ -175,7 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
         canRoll = true;
         rollButton.disabled = false;
 
-        if (!checkPossibleSum(currentSum, numbers)) {
+        // Verificar si quedan números disponibles
+        const availableNumbers = Array.from(numbers).filter(num => !num.classList.contains('closed'));
+        if (availableNumbers.length === 0) {
+            showGameOverModal();
+        } else if (!checkPossibleSum(currentSum, numbers)) {
             showGameOverModal();
         }
     }
@@ -194,6 +197,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!checkPossibleSum(currentSum, numbers)) {
                 showGameOverModal();
+            } else {
+                // El juego continúa, habilitar la selección de números
+                numbers.forEach(number => {
+                    if (!number.classList.contains('closed')) {
+                        number.style.pointerEvents = 'auto';
+                    }
+                });
             }
         } else {
             hideSumModal();
