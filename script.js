@@ -211,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const roll2 = getRandomDieValue();
                 updateDieImage(die1, roll1);
                 updateDieImage(die2, roll2);
+                die2.style.visibility = 'hidden';  // Mantén el segundo dado oculto
                 resetButton.disabled = false;
                 
                 showSumModal(roll1, roll2);
@@ -224,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         updateDieImage(die1, 1);
         updateDieImage(die2, 1);
+        die2.style.visibility = 'hidden';  // Oculta el segundo dado al reiniciar
         currentSum = 0;
         selectedSum = 0;
         canRoll = true;
