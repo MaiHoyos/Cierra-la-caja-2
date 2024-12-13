@@ -183,9 +183,21 @@ document.addEventListener('DOMContentLoaded', () => {
             hideSumModal();
             showCorrectGif();
             currentSum = lastRoll.die1 + hiddenDiceValue;
+            
+            // Verificar si es posible formar la suma con los números disponibles
+            const availableNumbers = Array.from(numbers).filter(num => !num.classList.contains('closed'));
+            const possibleCombinations = checkPossibleCombinations(currentSum, availableNumbers);
+            
+            if (!possibleCombinations) {
+                setTimeout(() => {
+                    showGameOverModal();
+                }, 1000);
+                return;
+            }
+
             selectedSum = 0;
             canRoll = false;
-            rollButton.disabled = false;  
+            rollButton.disabled = true;
 
             // Habilitar la selección de números
             numbers.forEach(number => {
@@ -197,6 +209,33 @@ document.addEventListener('DOMContentLoaded', () => {
             hideSumModal();
             showIncorrectGif();
         }
+    }
+
+    function checkPossibleCombinations(target, availableNumbers) {
+        const values = availableNumbers.map(num => parseInt(num.dataset.value));
+        
+        // Verificar todas las posibles combinaciones de 1 a 4 números
+        for (let i = 1; i <= Math.min(4, values.length); i++) {
+            if (findCombinationSum(values, target, i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function findCombinationSum(numbers, target, count, current = [], start = 0) {
+        if (count === 0) {
+            return current.reduce((a, b) => a + b, 0) === target;
+        }
+        
+        for (let i = start; i < numbers.length; i++) {
+            current.push(numbers[i]);
+            if (findCombinationSum(numbers, target, count - 1, current, i + 1)) {
+                return true;
+            }
+            current.pop();
+        }
+        return false;
     }
 
     function rollDice() {
