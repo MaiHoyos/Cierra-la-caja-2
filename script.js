@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateDieImage(dieElement, value) {
-        dieElement.src = `dados/dado${value}.png`;
+        dieElement.src = `dado${value}.PNG`;
         dieElement.alt = `Dado mostrando ${value}`;
     }
 
