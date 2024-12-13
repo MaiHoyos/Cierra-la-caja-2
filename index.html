@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cierra la Caja</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <div class="container">
+        <div id="instructionsSection">
+            <h1>¿Cómo jugar?</h1>
+            <div class="instructions">
+                <ol>
+                    <li>¡Lanza los dados!</li>
+                    <li>Suma los resultados que obtuviste en cada dado</li>
+                    <li>Escribe el resultado en la ventana</li>
+                    <li>Escoge 1, 2, 3 o 4 números que sumen entre ellos el resultado de los dados</li>
+                    <li>Sigue así hasta colorear todos los números</li>
+                </ol>
+            </div>
+            <button id="playButton">¡A JUGAR!</button>
+        </div>
+        <div id="gameSection" class="game">
+            <h1>Cierra la Caja</h1>
+            <div class="numbers">
+                <div class="number" data-value="1">1</div>
+                <div class="number" data-value="2">2</div>
+                <div class="number" data-value="3">3</div>
+                <div class="number" data-value="4">4</div>
+                <div class="number" data-value="5">5</div>
+                <div class="number" data-value="6">6</div>
+                <div class="number" data-value="7">7</div>
+                <div class="number" data-value="8">8</div>
+                <div class="number" data-value="9">9</div>
+            </div>
+            <div class="dice">
+                <img src="dado1.PNG" alt="Dado 1" class="die" id="die1">
+                <img src="dado1.PNG" alt="Dado 2" class="die" id="die2">
+            </div>
+            <div class="buttons">
+                <button id="rollButton">Lanzar dados</button>
+                <button id="resetButton">Reiniciar</button>
+            </div>
+        </div>
+    </div>
+
+    <img id="piuImage" src="piu.PNG" alt="Mascota Piu">
+
+    <div id="sumModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>SUMA</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Digite el resultado de la suma de los dados:</p>
+                <p id="diceSum"></p>
+                <input type="number" id="sumInput" min="1" max="12">
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button accept-button" id="acceptSum">Aceptar</button>
+                <button class="modal-button cancel-button" id="cancelSum">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="correctGif">
+        <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHJnNWNjNmxldWpvNTZvdnpra2R6bjY5Y3cxeTBudTl4dTVzdXNmbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1xNDVX4DV6B5vo6unw/giphy.webp" alt="Correct answer celebration">
+    </div>
+
+    <div id="incorrectGif">
+        <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWZwdnpleDU1Yjlpdmx6aTl5cGFmOGE1dzVtcjk5eTQ5MTkxbWxqYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/h8UsuceGlmI01g20ik/giphy.webp" alt="Incorrect answer">
+    </div>
+
+    <div id="gameOverModal" class="game-over-modal">
+        <div class="game-over-content">
+            <h2 class="game-over-title">¡Juego terminado!</h2>
+            <p class="game-over-message">No es posible formar la suma con los números disponibles.</p>
+            <button class="game-over-button" id="gameOverReset">Reiniciar juego</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
