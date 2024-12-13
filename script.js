@@ -173,14 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedSum = 0;
         canRoll = true;
         rollButton.disabled = false;
-
-        // Verificar si quedan números disponibles
-        const availableNumbers = Array.from(numbers).filter(num => !num.classList.contains('closed'));
-        if (availableNumbers.length === 0) {
-            showGameOverModal();
-        } else if (!checkPossibleSum(currentSum, numbers)) {
-            showGameOverModal();
-        }
     }
 
     acceptBtn.onclick = function() {
@@ -193,18 +185,14 @@ document.addEventListener('DOMContentLoaded', () => {
             currentSum = lastRoll.die1 + hiddenDiceValue;
             selectedSum = 0;
             canRoll = false;
-            rollButton.disabled = true;
+            rollButton.disabled = false;  
 
-            if (!checkPossibleSum(currentSum, numbers)) {
-                showGameOverModal();
-            } else {
-                // El juego continúa, habilitar la selección de números
-                numbers.forEach(number => {
-                    if (!number.classList.contains('closed')) {
-                        number.style.pointerEvents = 'auto';
-                    }
-                });
-            }
+            // Habilitar la selección de números
+            numbers.forEach(number => {
+                if (!number.classList.contains('closed')) {
+                    number.style.pointerEvents = 'auto';
+                }
+            });
         } else {
             hideSumModal();
             showIncorrectGif();
@@ -213,6 +201,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function rollDice() {
         if (canRoll) {
+            // Verificar si quedan fichas abiertas
+            const openNumbers = Array.from(numbers).filter(num => !num.classList.contains('closed'));
+            if (openNumbers.length === 0) {
+                showGameOverModal();
+                return;
+            }
+
             rollButton.disabled = true;
             resetButton.disabled = true;
 
