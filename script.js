@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playButton.addEventListener('click', () => {
         instructionsSection.style.display = 'none';
         gameSection.style.display = 'block';
+        die2.style.display = 'none';
     });
 
     numbers.forEach(number => {
@@ -213,7 +214,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 die2.style.display = 'none';
                 resetButton.disabled = false;
                 
-                showSumModal(lastRoll.die1, lastRoll.die2);
+                setTimeout(() => {
+                    showSumModal(lastRoll.die1, lastRoll.die2);
+                }, 1000);
             });
         }
     }
